@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Help | Mental Health AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+    <style>
+        /* Custom Background Gradient with Aurora Effect */
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background-attachment: fixed;
+            background-size: cover;
+            animation: aurora 10s infinite alternate;
+        }
+
+        @keyframes aurora {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Section Styling */
+        section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header and Footer Styling */
+        header, footer {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Hover Effects */
+        a:hover, button:hover {
+            transform: translateY(-2px);
+            transition: transform 0.2s ease;
+        }
+    </style>
+</head>
+<body class="font-roboto text-white">
+    <header class="p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Mental Health AI</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a class="hover:underline" href="home page.html">Home</a></li>
+                    <li><a class="hover:underline" href="contact page.html">Contact</a></li>
+                    <li><a class="hover:underline" href="help page.html">Help</a></li>
+                    <li><a class="hover:underline" href="profile.html">Profile</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="container mx-auto p-4">
+        <section class="my-8">
+            <h2 class="text-3xl font-bold text-center mb-4">Help & Support</h2>
+            <div class="bg-white p-6 rounded-lg shadow-lg text-gray-800">
+                <h3 class="text-xl font-bold mb-2">Common Problems & Solutions</h3>
+                <ul class="list-disc list-inside mb-4">
+                    <li><strong>Difficulty in syncing social media accounts:</strong> Ensure that you have granted all necessary permissions for the app to access your social media accounts. If the problem persists, try disconnecting and reconnecting the accounts.</li>
+                    <li><strong>Not receiving mood detection alerts:</strong> Check your notification settings to ensure that alerts are enabled. Also, make sure that the app has permission to send notifications on your device.</li>
+                    <li><strong>Issues with AI chatbot responses:</strong> If the chatbot is not responding appropriately, try restarting the app. If the issue continues, contact our support team for further assistance.</li>
+                    <li><strong>Problems with data privacy settings:</strong> Review your privacy settings within the app to ensure they are configured correctly. If you encounter any issues, refer to the app's help section or contact support.</li>
+                </ul>
+                <h3 class="text-xl font-bold mb-2">Steps to Use the Application</h3>
+                <ol class="list-decimal list-inside mb-4">
+                    <li>Download and install the Mental Health AI app from the app store.</li>
+                    <li>Create an account and log in.</li>
+                    <li>Sync your social media accounts and allow necessary permissions.</li>
+                    <li>Customize your data sharing and privacy settings.</li>
+                    <li>Start using the app to receive mood detection alerts and content suggestions.</li>
+                    <li>Engage with the AI chatbot for mental health support.</li>
+                </ol>
+                <h3 class="text-xl font-bold mb-2">Features</h3>
+                <ul class="list-disc list-inside mb-4">
+                    <li><strong>Data Collection & Analysis:</strong> Tracks social media activity, search history, and app usage patterns.</li>
+                    <li><strong>AI-Based Emotion Recognition:</strong> Uses NLP and Computer Vision to analyze text and content for emotional tone and behavioral patterns.</li>
+                    <li><strong>Real-Time Mental Health Interventions:</strong> Sends mood detection alerts, content suggestions, and offers AI chatbot support and custom wellness plans.</li>
+                    <li><strong>Privacy & Ethical Considerations:</strong> Ensures full user control over data sharing, anonymity, and data encryption for security.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    <footer class="p-4 text-center">
+        <p>© 2023 Mental Health AI. All rights reserved.</p>
+    </footer>
+</body>
+</html>

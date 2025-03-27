@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Home | Mental Health AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"/>
+    <style>
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+    </style>
+    <script>
+        // Function to show the modal when the page loads
+        function showModal() {
+            document.getElementById('quizModal').style.display = 'block';
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('quizModal').style.display = 'none';
+        }
+
+        // Function to handle quiz submission
+        function submitQuiz() {
+            // Here you can handle the quiz data as needed
+            alert("Quiz submitted!"); // Placeholder for actual submission logic
+            closeModal(); // Close the modal after submission
+        }
+    </script>
+</head>
+<body class="font-roboto bg-gray-100" onload="showModal()">
+    <header class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Mental Health AI</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a class="hover:underline" href="home page 2.html">Home</a></li>
+                    <li><a class="hover:underline" href="contact page.html">Contact</a></li>
+                    <li><a class="hover:underline" href="help page.html">Help</a></li>
+                    <li><a class="hover:underline" href="profile.html">Profile</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="container mx-auto p-4">
+        <section class="text-center my-8">
+            <h2 class="text-3xl font-bold mb-4">Daily Thought</h2>
+            <p class="text-lg italic" id="daily-thought">"Your mental health is a priority. Your happiness is essential."</p>
+        </section>
+        
+        <section class="my-8">
+            <h3 class="text-2xl font-bold text-center mb-4">Mood Tracking</h3>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <canvas id="moodChart" width="400" height="200"></canvas> <!-- Placeholder for Mood Chart -->
+                <p class="text-center mt-4">Track your mood over time to see patterns and triggers.</p>
+            </div>
+        </section>
+
+        <section class="my-8">
+            <h3 class="text-2xl font-bold text-center mb-4">Screen Time Analysis</h3>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <canvas id="screenTimeChart" width="400" height="200"></canvas> <!-- Placeholder for Screen Time Chart -->
+                <p class="text-center mt-4">Analyze your screen time to reduce doom scrolling.</p>
+            </div>
+        </section>
+
+        <section class="my-8">
+            <h3 class="text-2xl font-bold text-center mb-4">Recommended Videos</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-lg shadow-lg">
+                    <h4 class="font-bold">Workout Video 1</h4>
+                    <p>Join this energizing workout session to boost your mood!</p>
+                    <a href="#" class="text-blue-600 hover:underline">Watch Now</a>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-lg">
+                    <h4 class="font-bold">Healthy Snack Recipe 1</h4>
+                    <p>Learn how to make a delicious and healthy snack!</p>
+                    <a href="#" class="text-blue-600 hover:underline">Watch Now</a>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-lg">
+                    <h4 class="font-bold">Workout Video 2</h4>
+                    <p>Get fit with this fun and engaging workout routine!</p>
+                    <a href="#" class="text-blue-600 hover:underline">Watch Now</a>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-lg">
+                    <h4 class="font-bold">Healthy Snack Recipe 2</h4>
+                    <p>Quick and easy recipes for healthy snacking!</p>
+                    <a href="#" class="text-blue-600 hover:underline">Watch Now</a>
+                </div>
+            </div>
+        </ </section>
+    </main>
+    <footer class="bg-blue-600 text-white p-4 text-center">
+        <p>&copy; 2023 Mental Health AI. All rights reserved.</p>
+    </footer>
+</body>
+</html>

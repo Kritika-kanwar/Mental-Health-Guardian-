@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Screen Time Analysis | Mental Health AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+    <style>
+        /* Custom Background Gradient with Aurora Effect */
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background-attachment: fixed;
+            background-size: cover;
+            animation: aurora 10s infinite alternate;
+        }
+
+        @keyframes aurora {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Section Styling */
+        section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header and Footer Styling */
+        header, footer {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Visual Cues and Icons */
+        .visual-cue {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            padding: 10px;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        /* Hover Effects */
+        a:hover, button:hover {
+            transform: translateY(-2px);
+            transition: transform 0.2s ease;
+        }
+
+        /* Chart Styling */
+        canvas {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body class="font-roboto text-white">
+    <header class="p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Screen Time Analysis</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a class="hover:underline" href="index.html">Home</a></li>
+                    <li><a class="hover:underline" href="contact page.html">Contact</a></li>
+                    <li><a class="hover:underline" href="help page.html">Help</a></li>
+                    <li><a class="hover:underline" href="profile.html">Profile</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="container mx-auto p-4">
+        <section class="my-8">
+            <h3 class="text-2xl font-bold text-center mb-4">Your Screen Time</h3>
+            <div class="bg-white p-6 rounded-lg shadow-lg text-gray-800">
+                <div class="visual-cue">
+                    <i class="fas fa-clock text-blue-400 text-2xl"></i>
+                </div>
+                <p class="text-center text-lg font-semibold" id="totalTime">Loading screen time...</p>
+                <ul id="topApps" class="list-disc list-inside mt-4">
+                    <!-- Top apps will be populated dynamically -->
+                </ul>
+                <canvas id="screenTimeChart" width="400" height="200" class="mt-6"></canvas>
+                <p class="text-center mt-4">Analyze your screen time to reduce doom scrolling.</p>
+            </div>
+        </section>
+    </main>
+    <footer class="p-4 text-center">
+        <p>&copy; 2023 Mental Health AI. All rights reserved.</p>
+    </footer>
+
+    <script>
+        async function fetchScreenTimeData() {
+            try {
+                const screentimeData = await fetch('http://localhost:8085/api/screentime').then(res => res.json());
+                document.getElementById('totalTime').textContent = `Total Time: ${screentimeData.totalTime}`;
+                document.getElementById('topApps').innerHTML = screentimeData.topApps
+                    .map(app => `<li class="text-gray-800">${app}</li>`)
+                    .join('');
+
+                // Render the chart (example using Chart.js)
+                const ctx = document.getElementById('screenTimeChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: screentimeData.topApps.map(app => app.split(':')[0]), // Extract app names
+                        datasets: [{
+                            label: 'Usage Time (minutes)',
+                            data: screentimeData.topApps.map(app => parseFloat(app.split(':')[1])), // Extract usage time
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching screen time data:', error);
+            }
+        }
+
+        window.onload = fetchScreenTimeData;
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js for rendering charts -->
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome | Mental Health Guardian </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Background Gradient with Aurora Effect */
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background-attachment: fixed;
+            background-size: cover;
+            animation: aurora 10s infinite alternate;
+        }
+
+        @keyframes aurora {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Header and Footer Styling */
+        header, footer {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Section Styling */
+        section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hover Effects */
+        a:hover, button:hover {
+            transform: translateY(-2px);
+            transition: transform 0.2s ease;
+        }
+
+        /* Card Hover Effect */
+        .card:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+
+        /* Welcome Text Animation */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-text {
+            animation: fadeIn 1.5s ease-out;
+        }
+    </style>
+</head>
+<body class="font-roboto text-white">
+    <!-- Header -->
+    <header class="p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Mental Health AI</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a class="hover:underline" href="#">Privacy</a></li>
+                    <li><a class="hover:underline" href="contact page.html">Contact</a></li>
+                </ul>
+            </nav>  
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container mx-auto p-4">
+        <!-- Welcome Section -->
+        <section class="text-center my-8 welcome-text">
+            <h2 class="text-5xl font-bold mb-4">Welcome to Mental Health AI</h2>
+            <p class="text-xl">Your AI-powered companion for emotional well-being.</p>
+        </section>
+        
+        <!-- Features Section -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 my-8">
+            <!-- Feature 1 -->
+            <div class="bg-white p-6 rounded-lg shadow-lg card text-gray-800">
+                <img src="https://storage.googleapis.com/a1aa/image/gB3D8U-GQaUWyfxP91tCZ3XuG45Vx7azp40n40CE4xg.jpg" alt="AI-Based Emotional Support" class="w-full h-40 object-cover mb-4 rounded-lg">
+                <h3 class="text-xl font-bold mb-2">Data Collection & Analysis</h3>
+                <p>Tracks social media activity, search history, and app usage patterns to detect emotional states.</p>
+            </div>
+            <!-- Feature 2 -->
+            <div class="bg-white p-6 rounded-lg shadow-lg card text-gray-800">
+                <img src="https://storage.googleapis.com/a1aa/image/K7C7KtY_Km8_Ykr82cPW7KWbjetOx2uLLr0SEfrdXZU.jpg" alt="AI Mood Tracking" class="w-full h-40 object-cover mb-4 rounded-lg">
+                <h3 class="text-xl font-bold mb-2">AI-Based Emotion Recognition</h3>
+                <p>Uses NLP and Computer Vision to analyze text and content for emotional tone and behavioral patterns.</p>
+            </div>
+            <!-- Feature 3 -->
+            <div class="bg-white p-6 rounded-lg shadow-lg card text-gray-800">
+                <img src="https://storage.googleapis.com/a1aa/image/WR_Ud3u7Rm5eThODJDzWTOoQ8_BUd_LTpxNpjnDW3zc.jpg" alt="Real-time interventions" class="w-full h-40 object-cover mb-4 rounded-lg">
+                <h3 class="text-xl font-bold mb-2">Real-Time Mental Health Interventions</h3>
+                <p>Sends mood detection alerts, content suggestions, and offers AI chatbot support and custom wellness plans.</p>
+            </div>
+            <!-- Feature 4 -->
+            <div class="bg-white p-6 rounded-lg shadow-lg card text-gray-800">
+                <img src="https://storage.googleapis.com/a1aa/image/RTxV7-b3HUWobYepZx75aLa4fHFcLehDMo9QZiYJbLM.jpg" alt="Privacy & Security" class="w-full h-40 object-cover mb-4 rounded-lg">
+                <h3 class="text-xl font-bold mb-2">Privacy & Ethical Considerations</h3>
+                <p>Ensures full user control over data sharing, anonymity, and data encryption for security.</p>
+            </div>
+        </section>
+
+        <!-- Potential Challenges & Solutions Section -->
+        <section class="my-8">
+            <h2 class="text-3xl font-bold text-center mb-4">Potential Challenges & Solutions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg card text-gray-800">
+                    <h3 class="text-xl font-bold mb-2">Data Privacy & Ethics</h3>
+                    <p>Implement strict data security and user consent mechanisms.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg card text-gray-800">
+                    <h3 class="text-xl font-bold mb-2">Integration with Apps</h3>
+                    <p>Use API-based data tracking instead of unauthorized monitoring.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg card text-gray-800">
+                    <h3 class="text-xl font-bold mb-2">User Engagement</h3>
+                    <p>Ensure AI recommendations feel natural, helpful, and non-intrusive.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Who Would Benefit Section -->
+        <section class="my-8">
+            <h2 class="text-3xl font-bold text-center mb-4">Who Would Benefit?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg card text-gray-800">
+                    <h3 class="text-xl font-bold mb-2">Teenagers & Students</h3>
+                    <p>Struggling with social media stress.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg card text-gray-800">
+                    <h3 class="text-xl font-bold mb-2">Working Professionals</h3>
+                    <p>Dealing with burnout.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg card text-gray-800">
+                    <h3 class="text-xl font-bold mb-2">People with Mental Health Concerns</h3>
+                    <p>Needing early intervention.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call-to-Action Section -->
+        <section class="text-center my-8">
+            <a href="Sign up page.html" class="bg-blue-600 text-white py-3 px-6 rounded-lg text-lg hover:bg-blue-700 transition-all duration-300">
+                Get Started <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="p-4 text-center">
+        <p>© 2023 Mental Health AI. All rights reserved.</p>
+    </footer>
+</body>
+</html>

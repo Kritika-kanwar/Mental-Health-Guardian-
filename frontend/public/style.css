@@ -1,0 +1,48 @@
+.video-section {
+    border: 2px solid black; /* Black border */
+    padding: 16px;
+    margin-bottom: 20px;
+    border-radius: 8px; /* Optional: Rounded corners */
+    background-color: #9f8c8c; /* Light background for better contrast */
+}
+
+.video-grid {
+    display: flex;
+    flex-wrap: nowrap; /* Keeps items in a single row */
+    gap: 16px; /* Adds space between videos */
+    overflow-x: auto; /* Enables horizontal scrolling if videos overflow */
+}
+
+.video-card {
+    flex: 0 0 auto; /* Prevents shrinking and growing */
+    width: 250px; /* Set a fixed width for each card */
+}
+
+.video-item {
+    border: 1px solid #0b0101;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.video-item img {
+    width: 100%;
+    height: 150px; /* Fixed height for consistency */
+    object-fit: cover;
+}
+
+.video-item h3 {
+    padding: 8px;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+}
+.video-card a {
+    color: rgb(23, 23, 196); /* Set link color to blue */
+    text-decoration: underline; /* Add underline for better visibility */
+    font-weight: bold;
+}
+
+.video-card a:hover {
+    color: darkblue; /* Darker blue on hover for better interaction feedback */
+}
+

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Journal | Mental Health AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+    <style>
+        /* Custom Background Gradient with Aurora Effect */
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background-attachment: fixed;
+            background-size: cover;
+            animation: aurora 10s infinite alternate;
+        }
+
+        @keyframes aurora {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1000;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: black; /* Ensure text is black */
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+        }
+
+        .modal-overlay.active {
+            display: block;
+        }
+
+        /* Journal Entry Styles */
+        .journal-entry {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            color: rgb(8, 7, 7); /* Ensure text is black */
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .journal-entry:hover {
+            transform: scale(1.02);
+        }
+
+        .journal-entry-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .journal-entry-actions button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .journal-entry-actions button.edit {
+            background: #4299e1;
+            color: white;
+        }
+
+        .journal-entry-actions button.delete {
+            background: #e53e3e;
+            color: white;
+        }
+
+        .journal-entry-actions button.archive {
+            background: #38a169;
+            color: white;
+        }
+        /* Archived Journals Section */
+        .archived-journals {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 80px; /* Below the header */
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: black; /* Ensure text is black */
+            z-index: 1000;
+        }
+
+        .archived-journals.active {
+            display: block;
+        }
+
+        .archived-journals h4 {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .archived-journals ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .archived-journals li {
+            margin-bottom: 5px;
+            color: black; /* Ensure text is black */
+            cursor: pointer;
+        }
+
+        .archived-journals li:hover {
+            text-decoration: underline;
+        }
+
+        /* Archived Button */
+        #archivedButton {
+            position: fixed;
+            top: 80px; /* Below the header */
+            right: 20px;
+            background: #4299e1;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #archivedButton:hover {
+            background: #3182ce;
+        }
+
+        /* Emoji Picker Styles */
+        .emoji-picker {
+            position: absolute;
+            bottom: 60px;
+            right: 20px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+        }
+
+        .emoji-picker.show {
+            display: block;
+        }
+
+        .emoji-picker span {
+            cursor: pointer;
+            font-size: 20px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body class="font-roboto text-white">
+    <header class="p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Mental Health AI</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a class="hover:underline" href="home page 2.html">Home</a></li>
+                    <li><a class="hover:underline" href="contact page.html">Contact</a></li>
+                    <li><a class="hover:underline" href="help page.html">Help</a></li>
+                    <li><a class="hover:underline" href="profile.html">Profile</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Archived Button -->
+    <button id="archivedButton" onclick="toggleArchivedJournals()">Archived</button>
+
+    <!-- Archived Journals Section -->
+    <div class="archived-journals" id="archivedJournalsSection">
+        <h4>Archived Journals</h4>
+        <ul id="archivedJournalsList"></ul>
+    </div>
+
+    <main class="container mx-auto p-4">
+        <!-- Journal Section -->
+        <section class="my-8">
+            <h3 class="text-2xl font-bold text-center mb-4">Journal</h3>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <!-- Customization Options -->
+                <div class="flex flex-wrap gap-4 mb-4">
+                    <!-- Font Style Options -->
+                    <select id="fontStyle" class="p-2 border rounded-lg">
+                        <option value="Roboto">Roboto</option>
+                        <option value="Arial">Arial</option>
+                        <option value="Courier New">Courier New</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Comic Sans MS">Comic Sans MS</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                    </select>
+                    <!-- Emoji Picker Button -->
+                    <button onclick="toggleEmojiPicker()" class="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        <i class="fas fa-smile"></i> Emoji
+                    </button>
+                </div>
+                <!-- Emoji Picker -->
+                <div id="emojiPicker" class="emoji-picker">
+                    <span onclick="insertEmoji('😊')">😊</span>
+                    <span onclick="insertEmoji('❤️')">❤️</span>
+                    <span onclick="insertEmoji('🌟')">🌟</span>
+                    <span onclick="insertEmoji('🎉')">🎉</span>
+                    <span onclick="insertEmoji('😢')">😢</span>
+                    <span onclick="insertEmoji('😡')">😡</span>
+                </div>
+                <!-- Journal Entries List -->
+                <div id="journalEntries" class="mb-4"></div>
+
+                <!-- New Journal Button -->
+                <button onclick="openNewJournalModal()" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-plus"></i> New Journal
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- New Journal Modal -->
+    <div id="newJournalModal" class="modal">
+        <h3 class="text-2xl font-bold mb-4">New Journal</h3>
+        <textarea id="newJournalText" class="journal-textarea lines w-full p-4 rounded-lg shadow-lg" rows="10" placeholder="Write your thoughts here..."></textarea>
+        <div class="mt-4">
+            <button onclick="saveJournal()" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">Save</button>
+            <button onclick="closeModal()" class="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700">Cancel</button>
+        </div>
+    </div>
+    <div id="modalOverlay" class="modal-overlay"></div>
+
+    <!-- View Journal Modal -->
+    <div id="viewJournalModal" class="modal">
+        <h3 id="viewJournalDate" class="text-2xl font-bold mb-4"></h3>
+        <p id="viewJournalContent" class="journal-textarea lines w-full p-4 rounded-lg shadow-lg"></p>
+        <div class="mt-4">
+            <button onclick="closeModal()" class="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700">Close</button>
+        </div>
+    </div>
+
+    <footer class="p-4 text-center">
+        <p>&copy; 2023 Mental Health AI. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Load journals from localStorage
+        let journals = JSON.parse(localStorage.getItem('journals')) || [];
+        let archivedJournals = JSON.parse(localStorage.getItem('archivedJournals')) || [];
+
+        // Function to render journals
+        function renderJournals() {
+            const journalEntries = document.getElementById('journalEntries');
+            journalEntries.innerHTML = journals.map(journal => `
+                <div class="journal-entry" onclick="viewJournal('${journal.id}')">
+                    <p>${journal.date}</p>
+                    <div class="journal-entry-actions">
+                        <button class="edit" onclick="editJournal('${journal.id}'); event.stopPropagation();">Edit</button>
+                        <button class="delete" onclick="deleteJournal('${journal.id}'); event.stopPropagation();">Delete</button>
+                        <button class="archive" onclick="archiveJournal('${journal.id}'); event.stopPropagation();">Archive</button>
+                    </div>
+                </div>
+            `).join('');
+
+            const archivedJournalsList = document.getElementById('archivedJournalsList');
+            archivedJournalsList.innerHTML = archivedJournals.map(journal => `
+                <li onclick="viewJournal('${journal.id}')">
+                    ${journal.date}
+                    <button class="unarchive" onclick="unarchiveJournal('${journal.id}'); event.stopPropagation();">Unarchive</button>
+                    <button class="delete" onclick="deleteArchivedJournal('${journal.id}'); event.stopPropagation();">Delete</button>
+                </li>
+            `).join('');
+        }
+
+        // Function to toggle archived journals section
+        function toggleArchivedJournals() {
+            const archivedSection = document.getElementById('archivedJournalsSection');
+            archivedSection.classList.toggle('active');
+        }
+
+        // Function to open new journal modal
+        function openNewJournalModal() {
+            document.getElementById('newJournalModal').classList.add('active');
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        // Function to close modal
+        function closeModal() {
+            document.getElementById('newJournalModal').classList.remove('active');
+            document.getElementById('viewJournalModal').classList.remove('active');
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        // Function to save journal
+        function saveJournal() {
+            const journalText = document.getElementById('newJournalText').value;
+            if (journalText.trim() === "") {
+                alert("Please write something before saving.");
+                return;
+            }
+
+            const journalEntry = {
+                id: Date.now(),
+                date: new Date().toLocaleString(),
+                content: journalText,
+                fontStyle: document.getElementById('fontStyle').value,
+            };
+
+            journals.push(journalEntry);
+            localStorage.setItem('journals', JSON.stringify(journals));
+            renderJournals();
+            closeModal();
+            document.getElementById('newJournalText').value = '';
+        }
+
+        // Function to view journal
+        function viewJournal(id) {
+            const journal = [...journals, ...archivedJournals].find(j => j.id == id);
+            if (journal) {
+                document.getElementById('viewJournalDate').textContent = journal.date;
+                document.getElementById('viewJournalContent').textContent = journal.content;
+                document.getElementById('viewJournalContent').style.fontFamily = journal.fontStyle || 'Roboto';
+                document.getElementById('viewJournalModal').classList.add('active');
+                document.getElementById('modalOverlay').classList.add('active');
+            }
+        }
+
+        // Function to edit journal
+        function editJournal(id) {
+            const journal = journals.find(j => j.id == id);
+            if (journal) {
+                document.getElementById('newJournalText').value = journal.content;
+                document.getElementById('fontStyle').value = journal.fontStyle || 'Roboto';
+                openNewJournalModal();
+                deleteJournal(id);
+            }
+        }
+
+        // Function to delete journal
+        function deleteJournal(id) {
+            journals = journals.filter(j => j.id != id);
+            localStorage.setItem('journals', JSON.stringify(journals));
+            renderJournals();
+        }
+
+        // Function to archive journal
+        function archiveJournal(id) {
+            const journal = journals.find(j => j.id == id);
+            if (journal) {
+                archivedJournals.push(journal);
+                localStorage.setItem('archivedJournals', JSON.stringify(archivedJournals));
+                deleteJournal(id);
+                renderJournals();
+            }
+        }
+
+        // Function to unarchive journal
+        function unarchiveJournal(id) {
+            const journal = archivedJournals.find(j => j.id == id);
+            if (journal) {
+                journals.push(journal);
+                localStorage.setItem('journals', JSON.stringify(journals));
+                deleteArchivedJournal(id);
+                renderJournals();
+            }
+        }
+
+        // Function to delete archived journal
+        function deleteArchivedJournal(id) {
+            archivedJournals = archivedJournals.filter(j => j.id != id);
+            localStorage.setItem('archivedJournals', JSON.stringify(archivedJournals));
+            renderJournals();
+        }
+
+        // Function to toggle emoji picker
+        function toggleEmojiPicker() {
+            const emojiPicker = document.getElementById('emojiPicker');
+            emojiPicker.classList.toggle('show');
+        }
+
+        // Function to insert emoji into the textarea
+        function insertEmoji(emoji) {
+            const textarea = document.getElementById('newJournalText');
+            textarea.value += emoji;
+        }
+
+        // Function to apply font style
+        document.getElementById('fontStyle').addEventListener('change', function () {
+            const textarea = document.getElementById('newJournalText');
+            textarea.style.fontFamily = this.value;
+        });
+
+        // Initial render
+        renderJournals();
+    </script>
+</body>
+</html>

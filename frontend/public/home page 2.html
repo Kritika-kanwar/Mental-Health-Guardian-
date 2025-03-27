@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Home | Mental Health AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="chart.js"></script>  <!-- ✅ Make sure this file exists -->
+
+    <style>
+        /* Custom Background Gradient with Aurora Effect */
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background-attachment: fixed;
+            background-size: cover;
+            animation: aurora 10s infinite alternate;
+        }
+
+        @keyframes aurora {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            border-radius: 10px;
+        }
+
+        /* Section Styling */
+        section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header and Footer Styling */
+        header, footer {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Visual Cues and Icons */
+        .visual-cue {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            padding: 10px;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        /* Hover Effects */
+        a:hover, button:hover {
+            transform: translateY(-2px);
+            transition: transform 0.2s ease;
+        }
+
+        /* Center the screen time table */
+        #screenTimeContainer {
+            margin: auto;
+            text-align: center;
+            width: 80%;
+        }
+
+        #screenTimeChart {
+            width: 100% !important;
+            max-width: 500px; /* Adjust as needed */
+            height: 300px !important;
+            margin: auto;
+        }
+    </style>
+    <script>
+        function showModal() {
+            document.getElementById('quizModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('quizModal').style.display = 'none';
+        }
+
+        function submitQuiz() {
+            // Collect quiz answers
+            const formData = new FormData(document.getElementById('quizForm'));
+            const answers = {};
+            formData.forEach((value, key) => {
+                answers[key] = value;
+            });
+
+            // Log or process the answers (e.g., send to a server)
+            console.log('Quiz Answers:', answers);
+
+            // Display the mental health summary
+            displayMentalHealthSummary(answers);
+
+            // Show a success message
+            alert("Quiz submitted! Check your mental health summary below.");
+
+            // Close the modal
+            closeModal();
+
+            // Redirect to the home page
+            window.location.href = 'home page 2.html';
+        }
+
+        // Load random quote on page load
+        window.onload = function() {
+            showModal();
+            displayRandomQuote();
+            displayLatestJournals(); // Load latest journals
+        };
+
+        // Display latest journals
+        function displayLatestJournals() {
+            const journals = JSON.parse(localStorage.getItem('journals')) || [];
+            const journalList = document.getElementById('latestJournals');
+            if (journals.length === 0) {
+                journalList.innerHTML = `<p class="text-gray-800">No journals found. Start writing!</p>`;
+                return;
+            }
+
+            // Show the latest 2 journals
+            const latestJournals = journals.slice(-2).reverse();
+            journalList.innerHTML = latestJournals
+                .map(journal => `
+                    <div class="bg-white p-4 rounded-lg shadow-lg mb-4 text-gray-800">
+                        <p class="text-sm text-gray-600">${journal.date}</p>
+                        <p>${journal.content.substring(0, 100)}${journal.content.length > 100 ? '...' : ''}</p>
+                    </div>
+                `)
+                .join('');
+        }
+    </script>
+</head>
+<body class="font-roboto text-white">
+    <header class="p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Mental Health AI</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a class="hover:underline" href="home page 2.html">Home</a></li>
+                    <li><a class="hover:underline" href="contact page.html">Contact</a></li>
+                    <li><a class="hover:underline" href="help page.html">Help</a></li>
+                    <li><a class="hover:underline" href="profile.html">Profile</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="container mx-auto p-4">
+
+        <!-- ✅ User Info Section -->
+        <section class="my-8">
+            <h3 class="text-2xl font-bold text-center mb-4">Welcome</h3>
+            <div class="bg-white p-6 rounded-lg shadow-lg text-gray-800">
+                <p class="text-lg font-semibold">Username: <span id="username">Loading...</span></p>
+                <p class="text-lg">Email: <span id="email">Loading...</span></p>
+            </div>
+        </section>
+
+        <!-- Mental Health Summary Section -->
+        <section class="my-8">
+            <h3 class="text-2xl font-bold text-center mb-4">Your Mental Health Summary</h3>
+            <div id="mentalHealthSummary" class="bg-white p-6 rounded-lg shadow-lg text-gray-800">
+                <p class="text-center">Complete the quiz to see your mental health summary.</p>
+            </div>
+        </section>
+
+        <!-- ✅ Quote Section -->
+        <section class="text-center my-8">
+            <h2 class="text-3xl font-bold mb-4">Daily Thought</h2>
+            <p class="text-lg italic text-center" id="random-quote">Loading...</p>
+            <div class="visual-cue">
+                <i class="fas fa-quote-right text-blue-400 text-2xl"></i>
+            </div>
+        </section>
+
+          <!-- Mood Data Section -->
+    <section class="my-8">
+        <h3 class="text-2xl font-bold text-center mb-4">Mood Data (Last 7 Days)</h3>
+        <div id="moodChartContainer" class="bg-white p-6 rounded-lg shadow-lg">
+          <canvas id="moodChart"></canvas>
+        </div>
+      </section>
+    </main>
+  
+    <script>
+      // Mood Data
+      const moodData = [
+        { date: "2025-03-16", mood: "Happy" },
+        { date: "2025-03-15", mood: "Happy" },
+        { date: "2025-03-14", mood: "Anxious" },
+        { date: "2025-03-13", mood: "Stressed" },
+        { date: "2025-03-12", mood: "Excited" },
+        { date: "2025-03-11", mood: "Neutral" },
+        { date: "2025-03-10", mood: "Excited" },
+      ];
+  
+      // Map mood to numerical values
+      const moodToValue = {
+        Happy: 4,
+        Excited: 3,
+        Neutral: 2,
+        Anxious: 1,
+        Stressed: 0,
+      };
+  
+      // Prepare chart data
+      const chartData = {
+        labels: moodData.map((entry) => entry.date),
+        datasets: [
+          {
+            label: "Mood",
+            data: moodData.map((entry) => moodToValue[entry.mood]),
+            borderColor: "rgba(75, 192, 192, 1)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            fill: true,
+          },
+        ],
+      };
+  
+      // Chart options
+      const options = {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: "top",
+          },
+          title: {
+            display: true,
+            text: "Mood Over the Last 7 Days",
+          },
+        },
+        scales: {
+          y: {
+            ticks: {
+              callback: (value) => {
+                const moodLabels = Object.keys(moodToValue);
+                return moodLabels.find((key) => moodToValue[key] === value);
+              },
+            },
+          },
+        },
+      };
+  
+      // Initialize the chart
+      const ctx = document.getElementById("moodChart").getContext("2d");
+      new Chart(ctx, {
+        type: "line",
+        data: chartData,
+        options: options,
+      });
+    </script>
+
+        <!-- ✅ Screen Time Data Section -->
+        <section class="my-8">
+            <h3 class="text-2xl font-bold text-center mb-4">Screen Time Data (Last 7 Days)</h3>
+            <div id="screenTimeContainer" class="mt-6 p-4 bg-white shadow-md rounded">
+                <canvas id="screenTimeChart" width="400" height="200"></canvas>
+            </div>
+        </section>
+
+        <!-- ✅ Journal Section -->
+        <section class="my-8">
+            <h3 class="text-2xl font-bold text-center mb-4">Journal</h3>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <div id="latestJournals">
+                    <!-- Latest journals will be displayed here -->
+                </div>
+                <button onclick="window.location.href='journal.html';" class="bg-blue-600 text-white py-2 px-4 rounded-lg mt-4 hover:bg-blue-700 w-full">
+                    View All Journals
+                </button>
+            </div>
+        </section>
+
+        <!-- ✅ Recommendations Section -->
+        <section class="my-8">
+            <h3 class="text-2xl font-bold text-center mb-4">Recommended Videos</h3>
+            <div id="recommendationList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            </div>
+        </section>
+    </main>
+
+    <!-- Quiz Modal -->
+    <div id="quizModal" class="modal">
+        <div class="modal-content bg-white rounded-lg shadow-xl w-11/12 md:w-3/4 lg:w-1/2 mx-auto p-6">
+            <!-- Close Button -->
+            <span class="close text-gray-600 hover:text-gray-800 text-2xl cursor-pointer absolute top-4 right-4" onclick="closeModal()">&times;</span>
+            
+            <!-- Quiz Title -->
+            <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">Mental Health Quiz</h2>
+
+            <!-- Quiz Progress Bar -->
+            <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
+                <div id="quizProgress" class="bg-blue-600 h-2 rounded-full" style="width: 0%;"></div>
+            </div>
+
+            <!-- Quiz Questions Container -->
+            <form id="quizForm" onsubmit="event.preventDefault(); submitQuiz();">
+                <!-- Question 1 -->
+                <div class="quiz-question active">
+                    <label class="block text-gray-700 text-lg font-semibold mb-4">1. How have you been feeling lately?</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="feeling" value="happy" class="mr-3" required>
+                            <span class="text-gray-700">A) Generally happy and content</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="feeling" value="sad" class="mr-3" required>
+                            <span class="text-gray-700">B) Occasionally sad or down</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="feeling" value="stressed" class="mr-3" required>
+                            <span class="text-gray-700">C) Frequently anxious or stressed</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="quiz-question hidden">
+                    <label class="block text-gray-700 text-lg font-semibold mb-4">2. How often do you feel stressed or overwhelmed?</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="stress_frequency" value="rarely" class="mr-3" required>
+                            <span class="text-gray-700">A) Rarely (a few times a month)</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="stress_frequency" value="sometimes" class="mr-3" required>
+                            <span class="text-gray-700">B) Sometimes (a few times a week)</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="stress_frequency" value="often" class="mr-3" required>
+                            <span class="text-gray-700">C) Often (daily or almost daily)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="quiz-question hidden">
+                    <label class="block text-gray-700 text-lg font-semibold mb-4">3. Are you having trouble sleeping?</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="sleep_trouble" value="yes" class="mr-3" required>
+                            <span class="text-gray-700">A) Yes, frequently</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="sleep_trouble" value="no" class="mr-3" required>
+                            <span class="text-gray-700">B) No, not at all</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="sleep_trouble" value="occasionally" class="mr-3" required>
+                            <span class="text-gray-700">C) Occasionally, but it varies</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="quiz-question hidden">
+                    <label class="block text-gray-700 text-lg font-semibold mb-4">4. How many hours of sleep do you get on average?</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="sleep_hours" value="less_than_6" class="mr-3" required>
+                            <span class="text-gray-700">A) Less than 6 hours</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="sleep_hours" value="6_to_8" class="mr-3" required>
+                            <span class="text-gray-700">B) 6 to 8 hours</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="sleep_hours" value="more_than_8" class="mr-3" required>
+                            <span class="text-gray-700">C) More than 8 hours</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="quiz-question hidden">
+                    <label class="block text-gray-700 text-lg font-semibold mb-4">5. Do you feel tired or low on energy most of the time?</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="energy_level" value="yes" class="mr-3" required>
+                            <span class="text-gray-700">A) Yes, I often feel fatigued</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="energy_level" value="no" class="mr-3" required>
+                            <span class="text-gray-700">B) No, I generally feel energetic</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="energy_level" value="sometimes" class="mr-3" required>
+                            <span class="text-gray-700">C) Sometimes, it varies throughout the week</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="quiz-question hidden">
+                    <label class="block text-gray-700 text-lg font-semibold mb-4">6. Are you able to complete daily tasks without feeling drained?</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="task_completion" value="yes" class="mr-3" required>
+                            <span class="text-gray-700">A) Yes, I manage my tasks well</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="task_completion" value="no" class="mr-3" required>
+                            <span class="text-gray-700">B) No, I often feel exhausted</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="task_completion" value="sometimes" class="mr-3" required>
+                            <span class="text-gray-700">C) Sometimes, depending on the day</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 7 -->
+                <div class="quiz-question hidden">
+                    <label class="block text-gray-700 text-lg font-semibold mb-4">7. Do you have someone to talk to when you feel down?</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="support_system" value="yes" class="mr-3" required>
+                            <span class="text-gray-700">A) Yes, I have a strong support system</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="support_system" value="no" class="mr-3" required>
+                            <span class="text-gray-700">B) No, I feel isolated</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="support_system" value="sometimes" class="mr-3" required>
+                            <span class="text-gray-700">C) Sometimes, but it’s limited</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 8 -->
+                <div class="quiz-question hidden">
+                    <label class="block text-gray-700 text-lg font-semibold mb-4">8. Have you been avoiding social interactions lately?</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="social_interaction" value="yes" class="mr-3" required>
+                            <span class="text-gray-700">A) Yes, I prefer to be alone</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="social_interaction" value="no" class="mr-3" required>
+                            <span class="text-gray-700">B) No, I actively engage with others</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="social_interaction" value="occasionally" class="mr-3" required>
+                            <span class="text-gray-700">C) Occasionally, depending on my mood</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 9 -->
+                <div class="quiz-question hidden">
+                    <label class="block text-gray-700 text-lg font-semibold mb-4">9. How do you usually cope with stress?</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="coping_mechanism" value="physical" class="mr-3" required>
+                            <span class="text-gray-700">A) Engaging in physical activities (e.g., exercise, sports)</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="coping_mechanism" value="talking" class="mr-3" required>
+                            <span class="text-gray-700">B) Talking to friends or family</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="coping_mechanism" value="other" class="mr-3" required>
+                            <span class="text-gray-700">C) Other methods (e.g., meditation, hobbies)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 10 -->
+                <div class="quiz-question hidden">
+                    <label class="block text-gray-700 text-lg font-semibold mb-4">10. Do you often feel hopeless or have negative thoughts?</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="hopelessness" value="yes" class="mr-3" required>
+                            <span class="text-gray-700">A) Yes, frequently</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="hopelessness" value="no" class="mr-3" required>
+                            <span class="text-gray-700">B) No, I maintain a positive outlook</span>
+                        </label>
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-blue-50 cursor-pointer">
+                            <input type="radio" name="hopelessness" value="sometimes" class="mr-3" required>
+                            <span class="text-gray-700">C) Sometimes, but I try to manage it</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex justify-between mt-6">
+                    <button type="button" onclick="prevQuestion()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 hidden" id="prevBtn">Previous</button>
+                    <button type="button" onclick="nextQuestion()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 ml-auto" id="nextBtn">Next</button>
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 hidden" id="submitBtn">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Styles for the Quiz Modal -->
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            position: relative;
+            margin: 5% auto;
+            padding: 20px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .quiz-question {
+            display: none;
+        }
+
+        .quiz-question.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+
+    <!-- Script for Quiz Functionality -->
+    <script>
+        let currentQuestion = 0;
+        const questions = document.querySelectorAll('.quiz-question');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const quizProgress = document.getElementById('quizProgress');
+
+        // Show the first question
+        questions[currentQuestion].classList.add('active');
+
+        // Update progress bar
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            quizProgress.style.width = `${progress}%`;
+        }
+
+        // Navigate to the next question
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                questions[currentQuestion].classList.remove('active');
+                currentQuestion++;
+                questions[currentQuestion].classList.add('active');
+                updateProgress();
+            }
+
+            // Show/hide buttons
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+            }
+
+            if (currentQuestion > 0) {
+                prevBtn.classList.remove('hidden');
+            }
+        }
+
+        // Navigate to the previous question
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                questions[currentQuestion].classList.remove('active');
+                currentQuestion--;
+                questions[currentQuestion].classList.add('active');
+                updateProgress();
+            }
+
+            // Show/hide buttons
+            if (currentQuestion === 0) {
+                prevBtn.classList.add('hidden');
+            } else {
+                prevBtn.classList.remove('hidden');
+            }
+
+            if (currentQuestion < questions.length - 1) {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+            }
+        }
+
+        // ✅ Submit the quiz
+        function submitQuiz() {
+            // Collect quiz answers
+            const formData = new FormData(document.getElementById('quizForm'));
+            const answers = {};
+            formData.forEach((value, key) => {
+                answers[key] = value;
+            });
+
+            // ✅ Validate answers (Optional)
+            if (Object.values(answers).some(value => value === "")) {
+                alert("Please answer all questions before submitting!");
+                return;
+            }
+
+            // ✅ Log or process the answers (e.g., send to server)
+            console.log('Quiz Answers:', answers);
+
+            // ✅ Display the mental health summary
+            displayMentalHealthSummary(answers);
+
+            // ✅ Hide the quiz after submission
+            const quizForm = document.getElementById('quizForm');
+            if (quizForm) quizForm.style.display = 'none';
+
+            // ✅ Show a success message
+            alert("Quiz submitted! Check your mental health summary below.");
+
+            // ✅ Close the modal (if applicable)
+            if (typeof closeModal === 'function') closeModal();
+
+            // ✅ Prevent reloading and showing the questions again
+            history.pushState(null, null, window.location.href);
+        }
+
+        // Function to analyze quiz responses and generate a mental health summary
+        function analyzeQuizResponses(answers) {
+            let stressLevel = answers.stress_frequency;
+            let sadnessLevel = answers.feeling;
+            let sleepQuality = answers.sleep_trouble;
+            let energyLevel = answers.energy_level;
+            let concentrationLevel = answers.task_completion;
+            let socialSupport = answers.support_system;
+            let relaxationFrequency = answers.coping_mechanism;
+            let anxietyLevel = answers.hopelessness;
+            let socialEnjoyment = answers.social_interaction;
+            let stressCoping = answers.coping_mechanism;
+
+            // Initialize counters for health conclusions
+            let healthyCount = 0;
+            let mildConcernCount = 0;
+            let highRiskCount = 0;
+
+            // Analyze each response
+            if (stressLevel === 'rarely') healthyCount++;
+            else if (stressLevel === 'sometimes') mildConcernCount++;
+            else if (stressLevel === 'often') highRiskCount++;
+
+            if (sadnessLevel === 'happy') healthyCount++;
+            else if (sadnessLevel === 'sad') mildConcernCount++;
+            else if (sadnessLevel === 'stressed') highRiskCount++;
+
+            if (sleepQuality === 'no') healthyCount++;
+            else if (sleepQuality === 'occasionally') mildConcernCount++;
+            else if (sleepQuality === 'yes') highRiskCount++;
+
+            if (energyLevel === 'no') healthyCount++;
+            else if (energyLevel === 'sometimes') mildConcernCount++;
+            else if (energyLevel === 'yes') highRiskCount++;
+
+            if (concentrationLevel === 'yes') healthyCount++;
+            else if (concentrationLevel === 'sometimes') mildConcernCount++;
+            else if (concentrationLevel === 'no') highRiskCount++;
+
+            if (socialSupport === 'yes') healthyCount++;
+            else if (socialSupport === 'sometimes') mildConcernCount++;
+            else if (socialSupport === 'no') highRiskCount++;
+
+            if (relaxationFrequency === 'physical' || relaxationFrequency === 'talking') healthyCount++;
+            else if (relaxationFrequency === 'other') mildConcernCount++;
+
+            if (anxietyLevel === 'no') healthyCount++;
+            else if (anxietyLevel === 'sometimes') mildConcernCount++;
+            else if (anxietyLevel === 'yes') highRiskCount++;
+
+            if (socialEnjoyment === 'yes') healthyCount++;
+            else if (socialEnjoyment === 'sometimes') mildConcernCount++;
+            else if (socialEnjoyment === 'no') highRiskCount++;
+
+            if (stressCoping === 'physical' || stressCoping === 'talking') healthyCount++;
+            else if (stressCoping === 'other') mildConcernCount++;
+
+            // Determine the mental health conclusion
+            if (highRiskCount > mildConcernCount && highRiskCount > healthyCount) {
+                return {
+                    conclusion: "🔴 High-Risk Mental Health Concerns",
+                    description: "You may be experiencing significant stress, anxiety, or depression. It's important to seek professional help and prioritize self-care."
+                };
+            } else if (mildConcernCount > healthyCount) {
+                return {
+                    conclusion: "🟡 Mild to Moderate Mental Health Concerns",
+                    description: "You may be experiencing mild stress or low mood. Consider improving self-care, stress management, and social support."
+                };
+            } else {
+                return {
+                    conclusion: "🟢 Mentally Healthy Individual",
+                    description: "You are in good mental and emotional health. Keep up the great work with your self-care and stress management!"
+                };
+            }
+        }
+
+        // Function to display the mental health summary
+        function displayMentalHealthSummary(answers) {
+            const summary = analyzeQuizResponses(answers);
+            const summaryElement = document.getElementById('mentalHealthSummary');
+
+            if (summaryElement) {
+                summaryElement.innerHTML = `
+                    <h4 class="text-xl font-semibold text-center mb-4">${summary.conclusion}</h4>
+                    <p class="text-center">${summary.description}</p>
+                `;
+                // ✅ Make it visible
+                summaryElement.style.display = 'block'; 
+            } else {
+                console.error("❌ Element with id 'mentalHealthSummary' not found.");
+            }
+        }
+    </script>
+
+    <footer class="p-4 text-center">
+        <p>&copy; 2023 Mental Health AI. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // ✅ Fetch and Display Data on Page Load
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchmoodData();
+        });
+
+        // ✅ Fetch All Data
+        async function fetchData() {
+            try {
+                console.log("✅ Fetching data...");
+
+                // ✅ Display Loading States
+                function displayLoadingState(elementId) {
+                    const element = document.querySelector(elementId);
+                    if (element) {
+                        element.innerHTML = `<p class="text-center">Loading...</p>`;
+                    }
+                }
+                displayLoadingState("#screen-time-list");
+                displayLoadingState("#recommendationList");
+
+                // ✅ Fetch All API Data Simultaneously
+                const [screentimeRes, moodRes, quoteRes, recommendationRes] = await Promise.all([
+                    fetchWithErrorHandling("http://localhost:8085/api/user/userdata"),
+                    fetchWithErrorHandling("http://localhost:8085/api/quotes"),
+                    fetchWithErrorHandling("http://localhost:8085/api/personalized")
+                ]);
+
+                // ✅ ✅ ✅ Add console logs here to confirm the data is fetched:
+                console.log("✅ Quote Data:", quoteRes);
+                console.log("✅ Recommendation Data:", recommendationRes);
+
+                // ✅ Handle Quote Data
+                if (quoteRes) updateQuote(quoteRes);
+
+                // ✅ Handle Recommendations
+                if (recommendationRes) displayRecommendations(recommendationRes);
+
+            } catch (error) {
+                console.error("❌ Error fetching data:", error);
+                document.getElementById("recommendationList").innerHTML = 
+                    "<p style='color: red;'>Error loading recommendations.</p>";
+            }
+        }
+
+        // ✅ Fetch All Data
+        async function fetchUserData() {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) throw new Error("❌ No token found. Please log in.");
+
+                const response = await fetch("http://localhost:8085/api/user/userdata", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`❌ Failed to fetch user data: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log("✅ User Data:", data); // Debugging log
+
+                // ✅ Ensure elements exist before modifying them
+                const usernameElement = document.getElementById("username");
+                const emailElement = document.getElementById("email");
+                const screenTimeList = document.getElementById("screenTimeList");
+
+                if (usernameElement) usernameElement.textContent = data.username || "N/A";
+                if (emailElement) emailElement.textContent = data.email || "N/A";
+
+                // ✅ Handle Screen Time Data Display
+                if (screenTimeList) {
+                    screenTimeList.innerHTML = ""; // ✅ Clear previous data
+
+                    if (data.screenTimeData?.length > 0) {
+                        const items = data.screenTimeData.map(screenTime => `
+                            <div class="p-4 border-b border-gray-300">
+                                <h3 class="text-lg font-bold">${screenTime.date}</h3>
+                                <p>Total Time: <span class="font-semibold">${screenTime.totalMinutes} minutes</span></p>
+                                <p>Top Apps: ${screenTime.topApps?.join(", ") || "N/A"}</p>
+                            </div>
+                        `);
+                        screenTimeList.innerHTML = items.join(""); // ✅ Update efficiently
+                    } else {
+                        screenTimeList.innerHTML = `<p class="text-gray-500">No screen time data available</p>`;
+                    }
+                } else {
+                    console.error("❌ Element with ID 'screenTimeList' not found.");
+                }
+
+            } catch (error) {
+                console.error("❌ Error fetching user data:", error.message);
+                alert(error.message);
+            }
+        }
+
+        async function fetchScreenTimeForChart() {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    console.error("❌ No token found. Please log in.");
+                    return;
+                }
+
+                const response = await fetch("http://localhost:8085/api/screentime", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                console.log("📡 Fetch Response Status:", response.status);
+
+                if (!response.ok) {
+                    const errorMsg = await response.text();
+                    throw new Error(`❌ Failed to fetch screen time data: ${response.status} - ${errorMsg}`);
+                }
+
+                const screenTimeData = await response.json();
+                console.log("✅ Screen Time Data for Chart:", screenTimeData); // Debugging Log
+
+                if (!Array.isArray(screenTimeData) || screenTimeData.length === 0) {
+                    console.warn("⚠ No screen time data found.");
+                    return;
+                }
+
+                // ✅ Extract Dates and Screen Time for the Chart
+                const labels = screenTimeData.map(entry => entry.date);
+                const screenTimeValues = screenTimeData.map(entry => entry.totalMinutes);
+
+                console.log("📊 Chart Labels:", labels);
+                console.log("📊 Chart Data:", screenTimeValues);
+
+                // ✅ Ensure Canvas Exists Before Creating Chart
+                const canvas = document.getElementById("screenTimeChart");
+                if (!canvas) {
+                    console.error("❌ Canvas element for screen time chart not found.");
+                    return;
+                }
+
+                createScreenTimeChart(labels, screenTimeValues);
+                
+            } catch (error) {
+                console.error("❌ Error fetching screen time data:", error.message);
+            }
+        }
+
+        // ✅ Ensure Both Functions Run on Page Load
+        document.addEventListener("DOMContentLoaded", async function () {
+            await fetchUserData();  // ✅ Fetch user data
+            await fetchScreenTimeForChart(); // ✅ Fetch screen time data
+        });
+        
+        
+        async function fetchQuote() {
+            try {
+                console.log("✅ Fetching quote data...");
+
+                const response = await fetch('http://localhost:8085/api/quotes');
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+                const data = await response.json();
+                console.log("✅ Quote Data:", data);
+
+                // ✅ Update Quote (Handle both object and string data)
+                updateQuote(data);
+
+            } catch (error) {
+                console.error('❌ Error fetching quote:', error);
+                document.getElementById('random-quote').textContent = 'Failed to load quote.';
+            }
+        }
+
+        // ✅ Consolidated Function for Updating Quotes
+        function updateQuote(data) {
+            console.log("✅ Inside updateQuote function");
+            
+            const quoteElement = document.getElementById("random-quote");
+            if (quoteElement) {
+                console.log("✅ Quote element found");
+                
+                // ✅ Clear existing content (including "Loading...")
+                quoteElement.innerHTML = '';
+
+                // ✅ Handle both object and string data formats
+                const quote = typeof data === 'string' ? data : data?.quote;
+
+                if (quote) {
+                    quoteElement.textContent = `"${quote}"`;
+                    console.log(`✅ Quote displayed: ${quote}`);
+                } else {
+                    quoteElement.textContent = "No quote available";
+                    console.log("❌ No quote available");
+                }
+            } else {
+                console.error("❌ Quote element with ID 'random-quote' not found.");
+            }
+        }
+
+        // ✅ Call the function when the page loads
+        fetchQuote();
+
+        // ✅ Fetch Recommendations and Display Data
+        async function fetchRecommendations() {
+            try {
+                console.log("✅ Fetching recommendation data...");
+                const data = await fetchWithErrorHandling('http://localhost:8085/api/personalized');
+                console.log("✅ Recommendation Data Fetched:", data);
+                
+                if (data) {
+                    displayRecommendations(data);
+                }
+            } catch (error) {
+                console.error("❌ Error loading recommendations:", error);
+                document.getElementById("recommendationList").innerHTML = 
+                    "<p style='color: red;'>Error loading recommendations.</p>";
+            }
+        }
+
+        // ✅ Display Recommendations in a 3-Column Grid
+        function displayRecommendations(data) {
+            const recommendationList = document.getElementById("recommendationList");
+            if (!recommendationList) {
+                console.error("❌ Element #recommendationList not found.");
+                return;
+            }
+
+            recommendationList.innerHTML = ''; // Clear previous content
+
+            if (!data || Object.keys(data).length === 0) {
+                recommendationList.innerHTML = "<p style='color: red;'>No video recommendations available.</p>";
+                return;
+            }
+
+            // ✅ Loop through each category and display 3 videos
+            Object.entries(data).forEach(([category, videos]) => {
+                if (!Array.isArray(videos) || videos.length === 0) return;
+
+                const sectionContainer = document.createElement('div');
+                sectionContainer.classList.add('video-section');
+
+                // ✅ Create section title
+                const sectionTitle = document.createElement('h3');
+                sectionTitle.textContent = formatCategoryName(category);
+                sectionContainer.appendChild(sectionTitle);
+
+                const gridContainer = document.createElement("div");
+                gridContainer.classList.add("video-grid");
+
+                // ✅ Pick 3 random videos using getRandomVideos()
+                const selectedVideos = getRandomVideos(videos, 3);
+
+                selectedVideos.forEach(video => {
+                    const videoId = getYouTubeID(video);
+                    if (videoId) {
+                        const videoCard = document.createElement("div");
+                        videoCard.classList.add("video-card");
+
+                        // ✅ Create thumbnail
+                        const thumbnail = document.createElement("img");
+                        thumbnail.src = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+                        thumbnail.alt = formatCategoryName(category);
+                        thumbnail.loading = "lazy";
+
+                        // ✅ Create video link
+                        const videoLink = document.createElement("a");
+                        videoLink.href = video;
+                        videoLink.target = "_blank";
+                        videoLink.textContent = `▶️ Watch Video`;
+                        videoLink.classList.add("video-link");
+
+                        videoCard.appendChild(thumbnail);
+                        videoCard.appendChild(videoLink);
+                        gridContainer.appendChild(videoCard);
+                    }
+                });
+
+                sectionContainer.appendChild(gridContainer);
+                recommendationList.appendChild(sectionContainer);
+            });
+        }
+
+        // ✅ Helper: Extract YouTube Video ID
+        function getYouTubeID(url) {
+            const regExp = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/;
+            const match = url.match(regExp);
+            return match ? match[1] : null;
+        }
+
+        // ✅ Helper: Format Category Names
+        function formatCategoryName(category) {
+            return category.replace(/_/g, " ").toUpperCase();
+        }
+
+        // ✅ Helper: Pick Exactly 3 Random Videos
+        function getRandomVideos(array, num) {
+            if (!Array.isArray(array) || array.length === 0) return [];
+            const shuffled = array.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, num);
+        }
+
+        // ✅ Error Handling for Fetch Requests
+        async function fetchWithErrorHandling(url, retries = 3, timeout = 5000) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+            try {
+                const response = await fetch(url, { signal: controller.signal });
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error(`❌ Error fetching ${url}:`, error);
+
+                if (retries > 0) {
+                    console.log(`🔄 Retrying... (${retries} retries left)`);
+                    return fetchWithErrorHandling(url, retries - 1, timeout);
+                }
+
+                return null;
+            } finally {
+                clearTimeout(timeoutId);
+            }
+        }
+
+        // ✅ Trigger Fetch on Page Load
+        document.addEventListener("DOMContentLoaded", fetchRecommendations);
+
+        // ✅ Redirect to Homepage After Form Submission
+        function setupFormRedirect() {
+            const form = document.getElementById("formID");
+            if (form) {
+                form.addEventListener("submit", event => {
+                    event.preventDefault();
+                    console.log("✅ Form submitted, redirecting...");
+                    setTimeout(() => window.location.href = "home page 2.html", 1000);
+                });
+            } else {
+                console.warn("⚠️ Form with ID 'formID' not found.");
+            }
+        }
+        document.addEventListener("DOMContentLoaded", fetchUserData);
+    </script>
+</body>
+</html>

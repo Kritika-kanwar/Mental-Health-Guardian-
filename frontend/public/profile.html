@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>User Profile | Mental Health Guardian</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            font-family: 'Roboto', sans-serif;
+        }
+        .profile-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 1s ease-in-out;
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .profile-header h2 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2d3748;
+            animation: slideDown 0.8s ease-in-out;
+        }
+        .profile-header p {
+            font-size: 16px;
+            color: #718096;
+            animation: slideUp 0.8s ease-in-out;
+        }
+        .profile-section {
+            margin-bottom: 20px;
+            animation: fadeIn 1.2s ease-in-out;
+        }
+        .profile-section label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 5px;
+        }
+        .profile-section input,
+        .profile-section select,
+        .profile-section textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #4a5568;
+            background: #f7fafc;
+            transition: all 0.3s ease;
+        }
+        .profile-section input:focus,
+        .profile-section select:focus,
+        .profile-section textarea:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+            transform: scale(1.02);
+        }
+        .profile-picture {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        .profile-picture img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #e2e8f0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .profile-picture img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .profile-picture input[type="file"] {
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .profile-picture:hover input[type="file"] {
+            opacity: 1;
+        }
+        .save-button {
+            background: #4299e1;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        .save-button:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+        }
+        .logout-button {
+            background: #e53e3e;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        .logout-button:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Mental Health Guardian</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a class="hover:underline" href="home page 2.html">Home</a></li>
+                    <li><a class="hover:underline" href="contact page.html">Contact</a></li>
+                    <li><a class="hover:underline" href="help page.html">Help</a></li>
+                    <li><a class="hover:underline" href="profile.html">Profile</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container mx-auto p-4">
+        <div class="profile-container">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <h2>User Profile</h2>
+                <p>Update your profile information below.</p>
+            </div>
+
+            <!-- Profile Picture Section -->
+            <div class="profile-picture">
+                <img id="profileImagePreview" src="https://via.placeholder.com/120" alt="Profile Picture">
+                <input type="file" id="profilePhoto" name="profilePhoto" accept="image/*">
+            </div>
+
+            <!-- Profile Form -->
+            <form id="profileForm">
+                <!-- Name Field -->
+                <div class="profile-section">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <!-- Email Field -->
+                <div class="profile-section">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <!-- Phone Number Field -->
+                <div class="profile-section">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+
+                <!-- Screen Time History -->
+                <div class="profile-section">
+                    <label>Screen Time History</label>
+                    <div id="screenTimeHistory" class="p-4 bg-gray-50 rounded">
+                        <!-- Screen time data will be dynamically inserted here -->
+                    </div>
+                </div>
+
+                <!-- Privacy Lock -->
+                <div class="profile-section">
+                    <label for="privacyLock">Privacy Lock</label>
+                    <select id="privacyLock" name="privacyLock">
+                        <option value="enabled">Enable Privacy Lock</option>
+                        <option value="disabled">Disable Privacy Lock</option>
+                    </select>
+                </div>
+
+                <!-- App Theme -->
+                <div class="profile-section">
+                    <label for="appTheme">App Theme</label>
+                    <select id="appTheme" name="appTheme">
+                        <option value="light">Light Theme</option>
+                        <option value="dark">Dark Theme</option>
+                    </select>
+                </div>
+
+                <!-- Save Button -->
+                <div class="text-center">
+                    <button type="submit" class="save-button">Save Profile</button>
+                    <button type="button" class="logout-button" onclick="confirmLogout()">Log Out</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-blue-600 text-white p-4 text-center">
+        <p>&copy; 2023 SmartDriveEdu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Fetch user data from the backend (example using localStorage for demo purposes)
+        document.addEventListener('DOMContentLoaded', function () {
+            const user = JSON.parse(localStorage.getItem('user'));
+
+            if (user) {
+                document.getElementById('name').value = user.name || '';
+                document.getElementById('email').value = user.email || '';
+                document.getElementById('phone').value = user.phone || '';
+                document.getElementById('profileImagePreview').src = user.profilePhoto || 'https://via.placeholder.com/120';
+                document.getElementById('privacyLock').value = user.privacyLock || 'disabled';
+                document.getElementById('appTheme').value = user.appTheme || 'light';
+
+                // Display screen time history (example data)
+                const screenTimeHistory = user.screenTimeHistory || [];
+                const screenTimeHistoryDiv = document.getElementById('screenTimeHistory');
+                screenTimeHistoryDiv.innerHTML = screenTimeHistory.map(entry => `
+                    <div class="mb-2">
+                        <span class="font-bold">${entry.date}:</span> ${entry.time} minutes
+                    </div>
+                `).join('');
+            } else {
+                alert("No user data found. Please signup first.");
+                window.location.href = "sign up page.html";
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('profileForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const user = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                profilePhoto: document.getElementById('profileImagePreview').src,
+                privacyLock: document.getElementById('privacyLock').value,
+                appTheme: document.getElementById('appTheme').value,
+                screenTimeHistory: JSON.parse(localStorage.getItem('user')).screenTimeHistory || []
+            };
+
+            // Save updated user data (example using localStorage for demo purposes)
+            localStorage.setItem('user', JSON.stringify(user));
+            alert('Profile updated successfully!');
+        });
+
+        // Handle profile photo upload
+        document.getElementById('profilePhoto').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profileImagePreview').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Log Out Functionality
+        function confirmLogout() {
+            const confirmLogout = confirm("Are you sure you want to log out?");
+            if (confirmLogout) {
+                // Clear user data (example using localStorage for demo purposes)
+                localStorage.removeItem('user');
+                // Redirect to the welcome page
+                window.location.href = "welcome page.html";
+            }
+        }
+    </script>
+</body>
+</html>
